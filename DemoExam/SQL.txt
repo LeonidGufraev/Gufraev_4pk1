@@ -1,0 +1,111 @@
+CREATE DATABASE DemoExam04;
+
+USE DemoExam04;
+
+
+CREATE TABLE Role
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Type NVARCHAR (30) NOT NULL
+)
+
+CREATE TABLE Account
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Type INT FOREIGN KEY REFERENCES Role (Id),
+FullName NVARCHAR (100) NOT NULL,
+Phone BIGINT,
+Login NVARCHAR (50) NOT NULL,
+Password NVARCHAR (50) NOT NULL
+)
+
+CREATE TABLE Problem
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Description NVARCHAR (500) NOT NULL
+)
+
+CREATE TABLE RequestStatus
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Status NVARCHAR (30) NOT NULL
+)
+
+CREATE TABLE HomeTech
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Type NVARCHAR (20) NOT NULL,
+Model NVARCHAR (100) NOT NULL,
+RepairParts NVARCHAR (100)
+)
+
+CREATE TABLE Request
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+StartDate Date NOT NULL,
+CompletionDate Date,
+Object INT FOREIGN KEY REFERENCES HomeTech (Id) NOT NULL,
+Master INT FOREIGN KEY REFERENCES Account (Id),
+Client INT FOREIGN KEY REFERENCES Account (Id) NOT NULL,
+Status INT FOREIGN KEY REFERENCES RequestStatus (Id) NOT NULL,
+Problem INT FOREIGN KEY REFERENCES Problem (Id) NOT NULL
+)
+
+CREATE TABLE Message
+(
+Id INT IDENTITY(1,1) PRIMARY KEY,
+Message NVARCHAR (100) NOT NULL,
+Master INT FOREIGN KEY REFERENCES Account (Id) NOT NULL,
+Request INT FOREIGN KEY REFERENCES Request (Id) NOT NULL
+)
+
+
+
+INSERT Role VALUES
+('Менеджер'),
+('Мастер'),
+('Оператор'),
+('Заказчик')
+
+INSERT Account VALUES
+( 1, 'Трубин Никита Юрьевич', 89210563128, 'kasoo', 'root'),
+( 2, 'Мурашов Андрей Юрьевич', 89535078985, 'murashov123', 'qwerty'),
+( 2, 'Степанов Андрей Викторович', 89210673849, 'test1', 'test1'),
+( 3, 'Перина Анастасия Денисовна', 89990563748, 'perinaAD', '250519'),
+( 3, 'Мажитова Ксения Сергеевна', 89994563847, 'krutiha1234567', '1234567890'),
+( 2, 'Семенова Ясмина Марковна', 89994563847, 'login1', 'pass1'),
+( 4, 'Баранова Эмилия Марковна', 89994563841, 'login2', 'pass2'),
+( 4, 'Егорова Алиса Платоновна', 89994563842, 'login3', 'pass3'),
+( 4, 'Титов Максим Иванович', 89994563843, 'login4', 'pass4'),
+( 2, 'Иванов Марк Максимович', 89994563844, 'login5', 'pass5')
+
+INSERT Problem VALUES
+('Перестал работать'),
+('Не морозит одна из камер холодильника'),
+('Перестали работать многие режимы стирки'),
+('Перестала включаться'),
+('Гудит, но не замораживает')
+
+INSERT RequestStatus VALUES
+('Новая заявка'),
+('В процессе ремонта'),
+('Готова к выдаче')
+
+INSERT HomeTech VALUES
+('Фен', 'Ладомир ТА112 белый', ''),
+('Тостер', 'Redmond RT-437 черный',''),
+('Холодильник', 'Indesit DS 316 W белый',''),
+('Стиральная машина', 'DEXP WM-F610NTMA/WW белый',''),
+('Мультиварка', 'Redmond RMC-M95 черный',''),
+('Фен', 'Ладомир ТА113 чёрный',''),
+('Холодильник', 'Indesit DS 314 W серый', 'Мотор обдува морозильной камеры холодильника')
+
+
+INSERT Request VALUES
+('2023-06-06','',1, 2,7,2,1),
+('2023-05-05','',2, 3,7,2,1),
+('2022-07-07','2023-01-01',3, 2,8,3,2),
+('2023-08-02','',4, NULL,8,1,3),
+('2023-08-02','',5, NULL,9,1,4),
+('2023-08-02','2023-08-03',1, 2,7,3,1),
+('2023-07-09','2023-08-03',3, 2,8,3,5)
